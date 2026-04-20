@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Advanced Memory Visualizer</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<h1>Dynamic Memory Allocation Visualizer</h1>
+
+<div class="controls">
+    <input type="number" id="memSize" placeholder="Memory Size" value="20">
+    <button onclick="reset()">Set Memory</button>
+
+    <input type="number" id="size" placeholder="Process Size">
+
+    <select id="strategy">
+        <option value="first">First Fit</option>
+        <option value="best">Best Fit</option>
+        <option value="worst">Worst Fit</option>
+        <option value="next">Next Fit</option>
+    </select>
+
+    <button onclick="allocate()">Allocate</button>
+</div>
+
+<div id="memory"></div>
+
+<h3>Deallocate</h3>
+<input id="pid" placeholder="P1">
+<button onclick="deallocate()">Remove</button>
+
+<h3>Stats</h3>
+<div id="stats"></div>
+
+<div style="display:flex; justify-content:center; gap:30px; flex-wrap:wrap;">
+
+    <div class="chart-container">
+        <h3>Memory Usage</h3>
+        <canvas id="memoryChart"></canvas>
+    </div>
+
+    <div class="chart-container">
+        <h3>Fragmentation</h3>
+        <canvas id="fragChart"></canvas>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<h3>History</h3>
+<ul id="history"></ul>
+
+<script src="/static/script.js"></script>
+</body>
+</html>
