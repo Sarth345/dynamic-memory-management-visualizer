@@ -1,57 +1,145 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Advanced Memory Visualizer</title>
+    <title>Memory Management Simulator</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 
-<h1>Dynamic Memory Allocation Visualizer</h1>
+<h1>Memory Management Simulator</h1>
 
-<div class="controls">
-    <input type="number" id="memSize" placeholder="Memory Size" value="20">
-    <button onclick="reset()">Set Memory</button>
+<!-- Tabs -->
+<div class="tabs">
+    <button onclick="showTab('alloc')">Allocation</button>
+    <button onclick="showTab('paging')">Paging</button>
+    <button onclick="showTab('seg')">Segmentation</button>
+    <button onclick="showTab('vm')">Virtual Memory</button>
+</div>
 
-    <input type="number" id="size" placeholder="Process Size">
+<!-- ================= ALLOCATION ================= -->
+<div id="alloc" class="tab">
 
+    <h2>Contiguous Memory Allocation</h2>
+
+    <label>Memory Size</label><br>
+    <input id="memSize" value="20">
+    <button onclick="reset()">Set Memory</button><br>
+
+    <label>Process Size</label><br>
+    <input id="size" placeholder="Enter size"><br>
+
+    <label>Allocation Strategy</label><br>
     <select id="strategy">
         <option value="first">First Fit</option>
         <option value="best">Best Fit</option>
         <option value="worst">Worst Fit</option>
         <option value="next">Next Fit</option>
-    </select>
+    </select><br>
 
     <button onclick="allocate()">Allocate</button>
-</div>
 
-<div id="memory"></div>
+    <!-- Memory Blocks -->
+    <div id="memory"></div>
 
-<h3>Deallocate</h3>
-<input id="pid" placeholder="P1">
-<button onclick="deallocate()">Remove</button>
+    <!-- Deallocate -->
+    <label>Process ID to Deallocate</label><br>
+    <input id="pid" placeholder="e.g. P1">
+    <button onclick="deallocate()">Deallocate</button>
 
-<h3>Stats</h3>
-<div id="stats"></div>
+    <!-- Stats -->
+    <div id="stats"></div>
 
-<div style="display:flex; justify-content:center; gap:30px; flex-wrap:wrap;">
+    <!-- Graph -->
+    <div style="display:flex; justify-content:center; gap:30px; flex-wrap:wrap;">
 
+    <!-- Memory Usage -->
     <div class="chart-container">
         <h3>Memory Usage</h3>
         <canvas id="memoryChart"></canvas>
     </div>
 
+    <!-- Hole Graph -->
     <div class="chart-container">
-        <h3>Fragmentation</h3>
-        <canvas id="fragChart"></canvas>
+        <h3>Memory Holes (Fragmentation)</h3>
+        <canvas id="holeChart"></canvas>
     </div>
 
 </div>
 
+    <!-- History -->
+    <h3>History</h3>
+    <ul id="history"></ul>
+
+</div>
+
+<!-- ================= PAGING ================= -->
+<div id="paging" class="tab" style="display:none;">
+
+    <h2>Paging with Page Replacement</h2>
+
+    <label>Page Reference String</label><br>
+    <input id="pages" placeholder="e.g. 1 2 3 4 1 2"><br>
+
+    <label>Number of Frames</label><br>
+    <input id="frames" placeholder="e.g. 3"><br>
+
+    <label>Algorithm</label><br>
+    <select id="algo">
+        <option value="fifo">FIFO</option>
+        <option value="lru">LRU</option>
+    </select><br>
+
+    <button onclick="runPaging()">Run Simulation</button>
+
+    <h3>Result</h3>
+    <div id="pagingResult"></div>
+
+</div>
+
+<!-- ================= SEGMENTATION ================= -->
+<div id="seg" class="tab" style="display:none;">
+
+    <h2>Segmentation Address Translation</h2>
+
+    <label>Segment Table (Base Limit per line)</label><br>
+    <textarea id="segTable" placeholder="0 100&#10;100 200"></textarea><br>
+
+    <label>Segment Number</label><br>
+    <input id="segment" placeholder="e.g. 0"><br>
+
+    <label>Offset</label><br>
+    <input id="offset" placeholder="e.g. 50"><br>
+
+    <button onclick="runSegmentation()">Translate Address</button>
+
+    <h3>Result</h3>
+    <div id="segResult"></div>
+
+</div>
+
+<div id="vm" class="tab" style="display:none;">
+
+    <h2>Virtual Memory (Paging Translation)</h2>
+
+    <label>Logical Address</label><br>
+    <input id="logical" placeholder="e.g. 13"><br>
+
+    <label>Page Size</label><br>
+    <input id="pageSize" placeholder="e.g. 4"><br>
+
+    <label>Page Table (frame per line, -1 for not present)</label><br>
+    <textarea id="pageTable" placeholder="0\n1\n-1\n2"></textarea><br>
+
+    <button onclick="runVM()">Translate</button>
+
+    <h3>Result</h3>
+    <div id="vmResult"></div>
+
+</div>
+
+<!-- Scripts -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-<h3>History</h3>
-<ul id="history"></ul>
-
 <script src="/static/script.js"></script>
+
 </body>
 </html>

@@ -3,7 +3,7 @@ class MemoryAllocator:
         self.size = size
         self.memory = [None] * size
         self.process_counter = 1
-        self.last_index = 0  # for Next Fit
+        self.last_index = 0
 
     def allocate(self, size, strategy):
         pid = f"P{self.process_counter}"
@@ -68,10 +68,8 @@ class MemoryAllocator:
 
     def next_fit(self, size):
         n = self.size
-        start = self.last_index
-
         for i in range(n):
-            idx = (start + i) % n
+            idx = (self.last_index + i) % n
             if idx + size <= n and all(self.memory[j] is None for j in range(idx, idx + size)):
                 self.last_index = idx + size
                 return idx
@@ -83,24 +81,4 @@ class MemoryAllocator:
     def stats(self):
         used = sum(1 for x in self.memory if x)
         free = self.size - used
-
-        holes = []
-        i = 0
-        while i < self.size:
-            if self.memory[i] is None:
-                j = i
-                while j < self.size and self.memory[j] is None:
-                    j += 1
-                holes.append(j - i)
-                i = j
-            else:
-                i += 1
-
-        external_frag = sum(holes) - max(holes) if len(holes) > 1 else 0
-
-        return {
-            "total": self.size,
-            "used": used,
-            "free": free,
-            "external_frag": external_frag
-        }
+        return {"total": self.size, "used": used, "free": free}
