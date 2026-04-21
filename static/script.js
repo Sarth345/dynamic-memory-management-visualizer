@@ -13,6 +13,8 @@ function getColor(pid){
 function showTab(id){
  document.querySelectorAll(".tab").forEach(t=>t.style.display="none");
  document.getElementById(id).style.display="block";
+ document.querySelectorAll(".tabs button").forEach(b=>b.classList.remove("active"));
+ document.querySelector(`button[onclick="showTab('${id}')"]`).classList.add("active");
 }
 
 function initChart(){

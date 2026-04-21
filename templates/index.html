@@ -1,139 +1,141 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dynamic Memory Management Simulator</title>
     <link rel="stylesheet" href="/static/style.css">
 </head>
 <body>
 
-<h1>Dynamic Memory Management Simulator</h1>
+<div class="container">
+    <h1>Memory OS Simulator</h1>
 
-<!-- Tabs -->
-<div class="tabs">
-    <button onclick="showTab('alloc')">Allocation</button>
-    <button onclick="showTab('paging')">Paging</button>
-    <button onclick="showTab('seg')">Segmentation</button>
-    <button onclick="showTab('vm')">Virtual Memory</button>
-</div>
-
-<!-- ================= ALLOCATION ================= -->
-<div id="alloc" class="tab">
-
-    <h2>Contiguous Memory Allocation</h2>
-
-    <label>Memory Size</label><br>
-    <input id="memSize" value="20">
-    <button onclick="reset()">Set Memory</button><br>
-
-    <label>Process Size</label><br>
-    <input id="size" placeholder="Enter size"><br>
-
-    <label>Allocation Strategy</label><br>
-    <select id="strategy">
-        <option value="first">First Fit</option>
-        <option value="best">Best Fit</option>
-        <option value="worst">Worst Fit</option>
-        <option value="next">Next Fit</option>
-    </select><br>
-
-    <button onclick="allocate()">Allocate</button>
-
-    <!-- Memory Blocks -->
-    <div id="memory"></div>
-
-    <!-- Deallocate -->
-    <label>Process ID to Deallocate</label><br>
-    <input id="pid" placeholder="e.g. P1">
-    <button onclick="deallocate()">Deallocate</button>
-
-    <!-- Stats -->
-    <div id="stats"></div>
-
-    <!-- Graph -->
-    <div style="display:flex; justify-content:center; gap:30px; flex-wrap:wrap;">
-
-    <!-- Memory Usage -->
-    <div class="chart-container">
-        <h3>Memory Usage</h3>
-        <canvas id="memoryChart"></canvas>
+    <!-- Tabs -->
+    <div class="tabs">
+        <button onclick="showTab('alloc')" class="active">Allocation</button>
+        <button onclick="showTab('paging')">Paging</button>
+        <button onclick="showTab('seg')">Segmentation</button>
+        <button onclick="showTab('vm')">Virtual Memory</button>
     </div>
 
-    <!-- Hole Graph -->
-    <div class="chart-container">
-        <h3>Memory Holes (Fragmentation)</h3>
-        <canvas id="holeChart"></canvas>
+    <!-- ================= ALLOCATION ================= -->
+    <div id="alloc" class="tab">
+        <h2>Contiguous Allocation</h2>
+        
+        <div class="input-group">
+            <label>Memory Size</label>
+            <input id="memSize" value="20" placeholder="Size">
+            <button onclick="reset()" class="btn-secondary">Set Grid</button>
+        </div>
+
+        <div class="input-group">
+            <label>Process Size</label>
+            <input id="size" placeholder="Enter size">
+            
+            <label>Strategy</label>
+            <select id="strategy">
+                <option value="first">First Fit</option>
+                <option value="best">Best Fit</option>
+                <option value="worst">Worst Fit</option>
+                <option value="next">Next Fit</option>
+            </select>
+            <button onclick="allocate()">Allocate</button>
+        </div>
+
+        <div class="input-group">
+            <label>Deallocate PID</label>
+            <input id="pid" placeholder="e.g. P1">
+            <button onclick="deallocate()" class="btn-danger">Deallocate</button>
+        </div>
+
+        <div id="memory"></div>
+        <div id="stats"></div>
+
+        <div class="charts-wrapper">
+            <div class="chart-container">
+                <h3>Memory Usage</h3>
+                <div style="position: relative; height: 180px; width: 100%;">
+                    <canvas id="memoryChart"></canvas>
+                </div>
+            </div>
+            <div class="chart-container">
+                <h3>Fragmentation</h3>
+                <div style="position: relative; height: 180px; width: 100%;">
+                    <canvas id="holeChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <h3>Allocation History</h3>
+        <ul id="history"></ul>
     </div>
 
-</div>
+    <!-- ================= PAGING ================= -->
+    <div id="paging" class="tab" style="display:none;">
+        <h2>Page Replacement</h2>
 
-    <!-- History -->
-    <h3>History</h3>
-    <ul id="history"></ul>
+        <div class="input-group" style="flex-direction: column; align-items: stretch;">
+            <div style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
+                <label>Reference String</label>
+                <input id="pages" placeholder="e.g. 1 2 3 4 1 2">
+                
+                <label>Frames</label>
+                <input id="frames" placeholder="e.g. 3">
+                
+                <label>Algorithm</label>
+                <select id="algo">
+                    <option value="fifo">FIFO</option>
+                    <option value="lru">LRU</option>
+                </select>
+            </div>
+            <button onclick="runPaging()" style="margin: 0 auto;">Run Simulation</button>
+        </div>
 
-</div>
+        <div id="pagingResult" class="result-box"></div>
+    </div>
 
-<!-- ================= PAGING ================= -->
-<div id="paging" class="tab" style="display:none;">
+    <!-- ================= SEGMENTATION ================= -->
+    <div id="seg" class="tab" style="display:none;">
+        <h2>Segmentation Address Translation</h2>
 
-    <h2>Paging with Page Replacement</h2>
+        <div class="input-group" style="flex-direction: column; align-items: stretch;">
+            <div style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
+                <label>Segment Table (Base Limit)</label>
+                <textarea id="segTable" placeholder="0 100&#10;100 200"></textarea>
+                
+                <label>Segment</label>
+                <input id="segment" placeholder="e.g. 0">
+                
+                <label>Offset</label>
+                <input id="offset" placeholder="e.g. 50">
+            </div>
+            <button onclick="runSegmentation()" style="margin: 0 auto;">Translate Address</button>
+        </div>
 
-    <label>Page Reference String</label><br>
-    <input id="pages" placeholder="e.g. 1 2 3 4 1 2"><br>
+        <div id="segResult" class="result-box"></div>
+    </div>
 
-    <label>Number of Frames</label><br>
-    <input id="frames" placeholder="e.g. 3"><br>
+    <!-- ================= VIRTUAL MEMORY ================= -->
+    <div id="vm" class="tab" style="display:none;">
+        <h2>Virtual Memory</h2>
 
-    <label>Algorithm</label><br>
-    <select id="algo">
-        <option value="fifo">FIFO</option>
-        <option value="lru">LRU</option>
-    </select><br>
+        <div class="input-group" style="flex-direction: column; align-items: stretch;">
+            <div style="display:flex; gap:15px; justify-content:center; flex-wrap:wrap;">
+                <label>Logical Addr</label>
+                <input id="logical" placeholder="e.g. 13">
+                
+                <label>Page Size</label>
+                <input id="pageSize" placeholder="e.g. 4">
+                
+                <label>Page Table (1 frame/line)</label>
+                <textarea id="pageTable" placeholder="0&#10;1&#10;-1&#10;2"></textarea>
+            </div>
+            <button onclick="runVM()" style="margin: 0 auto;">Translate</button>
+        </div>
 
-    <button onclick="runPaging()">Run Simulation</button>
-
-    <h3>Result</h3>
-    <div id="pagingResult"></div>
-
-</div>
-
-<!-- ================= SEGMENTATION ================= -->
-<div id="seg" class="tab" style="display:none;">
-
-    <h2>Segmentation Address Translation</h2>
-
-    <label>Segment Table (Base Limit per line)</label><br>
-    <textarea id="segTable" placeholder="0 100&#10;100 200"></textarea><br>
-
-    <label>Segment Number</label><br>
-    <input id="segment" placeholder="e.g. 0"><br>
-
-    <label>Offset</label><br>
-    <input id="offset" placeholder="e.g. 50"><br>
-
-    <button onclick="runSegmentation()">Translate Address</button>
-
-    <h3>Result</h3>
-    <div id="segResult"></div>
-
-</div>
-
-<div id="vm" class="tab" style="display:none;">
-
-    <h2>Virtual Memory (Paging Translation)</h2>
-
-    <label>Logical Address</label><br>
-    <input id="logical" placeholder="e.g. 13"><br>
-
-    <label>Page Size</label><br>
-    <input id="pageSize" placeholder="e.g. 4"><br>
-
-    <label>Page Table (frame per line, -1 for not present)</label><br>
-    <textarea id="pageTable" placeholder="0\n1\n-1\n2"></textarea><br>
-
-    <button onclick="runVM()">Translate</button>
-
-    <h3>Result</h3>
-    <div id="vmResult"></div>
+        <div id="vmResult" class="result-box"></div>
+    </div>
 
 </div>
 

@@ -1,5 +1,7 @@
 # Dynamic Memory Management Visualizer
 
+🔗 **Live Demo:** [Click Here to View](YOUR_LINK_HERE)
+
 ## Overview
 
 This project is a web-based Dynamic Memory Management Visualizer developed using Python (Flask), HTML, CSS, and JavaScript. It demonstrates how memory is allocated and deallocated at runtime using different contiguous memory allocation strategies.
