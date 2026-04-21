@@ -1,6 +1,6 @@
 # Dynamic Memory Management Visualizer
 
-🔗 **Live Demo:** [Click Here to View](YOUR_LINK_HERE)
+
 
 ## Overview
 
