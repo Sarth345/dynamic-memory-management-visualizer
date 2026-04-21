@@ -132,4 +132,5 @@ This project provides a practical and interactive way to understand dynamic memo
 
 ## Author
 
-Sarth
+Sarthak
+Aman Pandey
