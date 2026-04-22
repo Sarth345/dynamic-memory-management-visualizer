@@ -10,7 +10,7 @@ The application provides an interactive interface to visualize memory usage, all
 
 ---
 
-## Features
+## Core Features
 
 * Dynamic memory allocation and deallocation
 * Support for multiple allocation strategies:
@@ -136,3 +136,4 @@ This project provides a practical and interactive way to understand dynamic memo
 
 1-Sarthak.....
 2-Aman Pandey
+3-Vidushi Gupta
