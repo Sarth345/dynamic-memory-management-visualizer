@@ -26,6 +26,9 @@ The application provides an interactive interface to visualize memory usage, all
 * Allocation history tracking
 * Adjustable memory size
 * Smooth animation for allocation
+* Paging
+* Segmentation
+* Virtual Memory
 
 ---
 
